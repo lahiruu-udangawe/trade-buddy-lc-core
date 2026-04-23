@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ImportLcIndexRouteImport } from './routes/import-lc.index'
+import { Route as ImportLcNewRouteImport } from './routes/import-lc.new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ImportLcIndexRoute = ImportLcIndexRouteImport.update({
+  id: '/import-lc/',
+  path: '/import-lc/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImportLcNewRoute = ImportLcNewRouteImport.update({
+  id: '/import-lc/new',
+  path: '/import-lc/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/import-lc/new': typeof ImportLcNewRoute
+  '/import-lc/': typeof ImportLcIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/import-lc/new': typeof ImportLcNewRoute
+  '/import-lc': typeof ImportLcIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/import-lc/new': typeof ImportLcNewRoute
+  '/import-lc/': typeof ImportLcIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/import-lc/new' | '/import-lc/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/import-lc/new' | '/import-lc'
+  id: '__root__' | '/' | '/import-lc/new' | '/import-lc/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ImportLcNewRoute: typeof ImportLcNewRoute
+  ImportLcIndexRoute: typeof ImportLcIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/import-lc/': {
+      id: '/import-lc/'
+      path: '/import-lc'
+      fullPath: '/import-lc/'
+      preLoaderRoute: typeof ImportLcIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/import-lc/new': {
+      id: '/import-lc/new'
+      path: '/import-lc/new'
+      fullPath: '/import-lc/new'
+      preLoaderRoute: typeof ImportLcNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ImportLcNewRoute: ImportLcNewRoute,
+  ImportLcIndexRoute: ImportLcIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
