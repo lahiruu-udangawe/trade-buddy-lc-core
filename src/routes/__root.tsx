@@ -38,6 +38,10 @@ export const Route = createRootRoute({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "TradeFlow AI — Virtual Trade Automation" },
+      { name: "twitter:description", content: "AI-powered Letter of Credit and trade finance automation for banks." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/51d4a5ff-aae1-4895-b565-a73aac4e4784/id-preview-f60fc300--707007d1-71c0-4de2-8bf1-1a184aff8db9.lovable.app-1776959417620.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/51d4a5ff-aae1-4895-b565-a73aac4e4784/id-preview-f60fc300--707007d1-71c0-4de2-8bf1-1a184aff8db9.lovable.app-1776959417620.png" },
     ],
     links: [
       {
