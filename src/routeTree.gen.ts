@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ImportWoLcIndexRouteImport } from './routes/import-wo-lc.index'
 import { Route as ImportLcIndexRouteImport } from './routes/import-lc.index'
 import { Route as ExportLcIndexRouteImport } from './routes/export-lc.index'
 import { Route as ImportLcNewRouteImport } from './routes/import-lc.new'
@@ -20,6 +21,11 @@ import { Route as ExportLcIdRouteImport } from './routes/export-lc.$id'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImportWoLcIndexRoute = ImportWoLcIndexRouteImport.update({
+  id: '/import-wo-lc/',
+  path: '/import-wo-lc/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImportLcIndexRoute = ImportLcIndexRouteImport.update({
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/import-lc/new': typeof ImportLcNewRoute
   '/export-lc/': typeof ExportLcIndexRoute
   '/import-lc/': typeof ImportLcIndexRoute
+  '/import-wo-lc/': typeof ImportWoLcIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/import-lc/new': typeof ImportLcNewRoute
   '/export-lc': typeof ExportLcIndexRoute
   '/import-lc': typeof ImportLcIndexRoute
+  '/import-wo-lc': typeof ImportWoLcIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/import-lc/new': typeof ImportLcNewRoute
   '/export-lc/': typeof ExportLcIndexRoute
   '/import-lc/': typeof ImportLcIndexRoute
+  '/import-wo-lc/': typeof ImportWoLcIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/import-lc/new'
     | '/export-lc/'
     | '/import-lc/'
+    | '/import-wo-lc/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/import-lc/new'
     | '/export-lc'
     | '/import-lc'
+    | '/import-wo-lc'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/import-lc/new'
     | '/export-lc/'
     | '/import-lc/'
+    | '/import-wo-lc/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +131,7 @@ export interface RootRouteChildren {
   ImportLcNewRoute: typeof ImportLcNewRoute
   ExportLcIndexRoute: typeof ExportLcIndexRoute
   ImportLcIndexRoute: typeof ImportLcIndexRoute
+  ImportWoLcIndexRoute: typeof ImportWoLcIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/import-wo-lc/': {
+      id: '/import-wo-lc/'
+      path: '/import-wo-lc'
+      fullPath: '/import-wo-lc/'
+      preLoaderRoute: typeof ImportWoLcIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/import-lc/': {
@@ -183,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   ImportLcNewRoute: ImportLcNewRoute,
   ExportLcIndexRoute: ExportLcIndexRoute,
   ImportLcIndexRoute: ImportLcIndexRoute,
+  ImportWoLcIndexRoute: ImportWoLcIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
