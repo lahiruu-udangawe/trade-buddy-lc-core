@@ -126,7 +126,7 @@ function SwiftHub() {
                   <td className="px-5 py-3 text-xs text-muted-foreground">{r.reference}</td>
                   <td className="px-5 py-3 text-xs">{r.module}</td>
                   <td className="px-5 py-3">
-                    <Link to={r.parentLink.to as any} params={r.parentLink.params} className="text-primary hover:underline text-sm">{r.parent}</Link>
+                    <Link to={r.parentLink.to as any} params={r.parentLink.params as any} className="text-primary hover:underline text-sm">{r.parent}</Link>
                   </td>
                   <td className="px-5 py-3 text-xs text-muted-foreground">{r.createdAt}</td>
                   <td className="px-5 py-3"><ResultBadge result={r.status} /></td>
