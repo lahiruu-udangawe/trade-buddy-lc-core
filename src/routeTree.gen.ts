@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SwiftIndexRouteImport } from './routes/swift.index'
+import { Route as ReportingIndexRouteImport } from './routes/reporting.index'
 import { Route as ImportWoLcIndexRouteImport } from './routes/import-wo-lc.index'
 import { Route as ImportLcIndexRouteImport } from './routes/import-lc.index'
 import { Route as GuaranteesIndexRouteImport } from './routes/guarantees.index'
@@ -35,6 +36,11 @@ const IndexRoute = IndexRouteImport.update({
 const SwiftIndexRoute = SwiftIndexRouteImport.update({
   id: '/swift/',
   path: '/swift/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportingIndexRoute = ReportingIndexRouteImport.update({
+  id: '/reporting/',
+  path: '/reporting/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImportWoLcIndexRoute = ImportWoLcIndexRouteImport.update({
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/guarantees/': typeof GuaranteesIndexRoute
   '/import-lc/': typeof ImportLcIndexRoute
   '/import-wo-lc/': typeof ImportWoLcIndexRoute
+  '/reporting/': typeof ReportingIndexRoute
   '/swift/': typeof SwiftIndexRoute
 }
 export interface FileRoutesByTo {
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/guarantees': typeof GuaranteesIndexRoute
   '/import-lc': typeof ImportLcIndexRoute
   '/import-wo-lc': typeof ImportWoLcIndexRoute
+  '/reporting': typeof ReportingIndexRoute
   '/swift': typeof SwiftIndexRoute
 }
 export interface FileRoutesById {
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/guarantees/': typeof GuaranteesIndexRoute
   '/import-lc/': typeof ImportLcIndexRoute
   '/import-wo-lc/': typeof ImportWoLcIndexRoute
+  '/reporting/': typeof ReportingIndexRoute
   '/swift/': typeof SwiftIndexRoute
 }
 export interface FileRouteTypes {
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/guarantees/'
     | '/import-lc/'
     | '/import-wo-lc/'
+    | '/reporting/'
     | '/swift/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/guarantees'
     | '/import-lc'
     | '/import-wo-lc'
+    | '/reporting'
     | '/swift'
   id:
     | '__root__'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/guarantees/'
     | '/import-lc/'
     | '/import-wo-lc/'
+    | '/reporting/'
     | '/swift/'
   fileRoutesById: FileRoutesById
 }
@@ -248,6 +260,7 @@ export interface RootRouteChildren {
   GuaranteesIndexRoute: typeof GuaranteesIndexRoute
   ImportLcIndexRoute: typeof ImportLcIndexRoute
   ImportWoLcIndexRoute: typeof ImportWoLcIndexRoute
+  ReportingIndexRoute: typeof ReportingIndexRoute
   SwiftIndexRoute: typeof SwiftIndexRoute
 }
 
@@ -265,6 +278,13 @@ declare module '@tanstack/react-router' {
       path: '/swift'
       fullPath: '/swift/'
       preLoaderRoute: typeof SwiftIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reporting/': {
+      id: '/reporting/'
+      path: '/reporting'
+      fullPath: '/reporting/'
+      preLoaderRoute: typeof ReportingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/import-wo-lc/': {
@@ -392,6 +412,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuaranteesIndexRoute: GuaranteesIndexRoute,
   ImportLcIndexRoute: ImportLcIndexRoute,
   ImportWoLcIndexRoute: ImportWoLcIndexRoute,
+  ReportingIndexRoute: ReportingIndexRoute,
   SwiftIndexRoute: SwiftIndexRoute,
 }
 export const routeTree = rootRouteImport
