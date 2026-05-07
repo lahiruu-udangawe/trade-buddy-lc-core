@@ -5,6 +5,7 @@ import {
   AlertTriangle, Banknote, Activity, Eye, Download,
 } from "lucide-react";
 import { getImportWoLC } from "@/lib/mock-import-wo-lc";
+import type { ImportWoLC } from "@/lib/import-wo-lc-types";
 import { StatusBadge, SeverityBadge, ResultBadge } from "@/components/lc/StatusBadge";
 import { cn } from "@/lib/utils";
 
@@ -47,7 +48,7 @@ const tabs = [
 ] as const;
 
 function ImportWoLCDetail() {
-  const lc = Route.useLoaderData();
+  const lc = Route.useLoaderData() as ImportWoLC;
   const [active, setActive] = useState<(typeof tabs)[number]["id"]>("overview");
 
   return (
