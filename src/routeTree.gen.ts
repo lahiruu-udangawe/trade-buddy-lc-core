@@ -18,6 +18,7 @@ import { Route as ImportWoLcNewRouteImport } from './routes/import-wo-lc.new'
 import { Route as ImportWoLcIdRouteImport } from './routes/import-wo-lc.$id'
 import { Route as ImportLcNewRouteImport } from './routes/import-lc.new'
 import { Route as ImportLcIdRouteImport } from './routes/import-lc.$id'
+import { Route as ExportWoLcNewRouteImport } from './routes/export-wo-lc.new'
 import { Route as ExportWoLcIdRouteImport } from './routes/export-wo-lc.$id'
 import { Route as ExportLcNewRouteImport } from './routes/export-lc.new'
 import { Route as ExportLcIdRouteImport } from './routes/export-lc.$id'
@@ -67,6 +68,11 @@ const ImportLcIdRoute = ImportLcIdRouteImport.update({
   path: '/import-lc/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExportWoLcNewRoute = ExportWoLcNewRouteImport.update({
+  id: '/export-wo-lc/new',
+  path: '/export-wo-lc/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExportWoLcIdRoute = ExportWoLcIdRouteImport.update({
   id: '/export-wo-lc/$id',
   path: '/export-wo-lc/$id',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/export-lc/$id': typeof ExportLcIdRoute
   '/export-lc/new': typeof ExportLcNewRoute
   '/export-wo-lc/$id': typeof ExportWoLcIdRoute
+  '/export-wo-lc/new': typeof ExportWoLcNewRoute
   '/import-lc/$id': typeof ImportLcIdRoute
   '/import-lc/new': typeof ImportLcNewRoute
   '/import-wo-lc/$id': typeof ImportWoLcIdRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/export-lc/$id': typeof ExportLcIdRoute
   '/export-lc/new': typeof ExportLcNewRoute
   '/export-wo-lc/$id': typeof ExportWoLcIdRoute
+  '/export-wo-lc/new': typeof ExportWoLcNewRoute
   '/import-lc/$id': typeof ImportLcIdRoute
   '/import-lc/new': typeof ImportLcNewRoute
   '/import-wo-lc/$id': typeof ImportWoLcIdRoute
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/export-lc/$id': typeof ExportLcIdRoute
   '/export-lc/new': typeof ExportLcNewRoute
   '/export-wo-lc/$id': typeof ExportWoLcIdRoute
+  '/export-wo-lc/new': typeof ExportWoLcNewRoute
   '/import-lc/$id': typeof ImportLcIdRoute
   '/import-lc/new': typeof ImportLcNewRoute
   '/import-wo-lc/$id': typeof ImportWoLcIdRoute
@@ -133,6 +142,7 @@ export interface FileRouteTypes {
     | '/export-lc/$id'
     | '/export-lc/new'
     | '/export-wo-lc/$id'
+    | '/export-wo-lc/new'
     | '/import-lc/$id'
     | '/import-lc/new'
     | '/import-wo-lc/$id'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/export-lc/$id'
     | '/export-lc/new'
     | '/export-wo-lc/$id'
+    | '/export-wo-lc/new'
     | '/import-lc/$id'
     | '/import-lc/new'
     | '/import-wo-lc/$id'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/export-lc/$id'
     | '/export-lc/new'
     | '/export-wo-lc/$id'
+    | '/export-wo-lc/new'
     | '/import-lc/$id'
     | '/import-lc/new'
     | '/import-wo-lc/$id'
@@ -176,6 +188,7 @@ export interface RootRouteChildren {
   ExportLcIdRoute: typeof ExportLcIdRoute
   ExportLcNewRoute: typeof ExportLcNewRoute
   ExportWoLcIdRoute: typeof ExportWoLcIdRoute
+  ExportWoLcNewRoute: typeof ExportWoLcNewRoute
   ImportLcIdRoute: typeof ImportLcIdRoute
   ImportLcNewRoute: typeof ImportLcNewRoute
   ImportWoLcIdRoute: typeof ImportWoLcIdRoute
@@ -251,6 +264,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ImportLcIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/export-wo-lc/new': {
+      id: '/export-wo-lc/new'
+      path: '/export-wo-lc/new'
+      fullPath: '/export-wo-lc/new'
+      preLoaderRoute: typeof ExportWoLcNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/export-wo-lc/$id': {
       id: '/export-wo-lc/$id'
       path: '/export-wo-lc/$id'
@@ -280,6 +300,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExportLcIdRoute: ExportLcIdRoute,
   ExportLcNewRoute: ExportLcNewRoute,
   ExportWoLcIdRoute: ExportWoLcIdRoute,
+  ExportWoLcNewRoute: ExportWoLcNewRoute,
   ImportLcIdRoute: ImportLcIdRoute,
   ImportLcNewRoute: ImportLcNewRoute,
   ImportWoLcIdRoute: ImportWoLcIdRoute,
