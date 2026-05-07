@@ -19,6 +19,8 @@ import { Route as ImportWoLcNewRouteImport } from './routes/import-wo-lc.new'
 import { Route as ImportWoLcIdRouteImport } from './routes/import-wo-lc.$id'
 import { Route as ImportLcNewRouteImport } from './routes/import-lc.new'
 import { Route as ImportLcIdRouteImport } from './routes/import-lc.$id'
+import { Route as GuaranteesNewRouteImport } from './routes/guarantees.new'
+import { Route as GuaranteesIdRouteImport } from './routes/guarantees.$id'
 import { Route as ExportWoLcNewRouteImport } from './routes/export-wo-lc.new'
 import { Route as ExportWoLcIdRouteImport } from './routes/export-wo-lc.$id'
 import { Route as ExportLcNewRouteImport } from './routes/export-lc.new'
@@ -74,6 +76,16 @@ const ImportLcIdRoute = ImportLcIdRouteImport.update({
   path: '/import-lc/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuaranteesNewRoute = GuaranteesNewRouteImport.update({
+  id: '/guarantees/new',
+  path: '/guarantees/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuaranteesIdRoute = GuaranteesIdRouteImport.update({
+  id: '/guarantees/$id',
+  path: '/guarantees/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExportWoLcNewRoute = ExportWoLcNewRouteImport.update({
   id: '/export-wo-lc/new',
   path: '/export-wo-lc/new',
@@ -101,6 +113,8 @@ export interface FileRoutesByFullPath {
   '/export-lc/new': typeof ExportLcNewRoute
   '/export-wo-lc/$id': typeof ExportWoLcIdRoute
   '/export-wo-lc/new': typeof ExportWoLcNewRoute
+  '/guarantees/$id': typeof GuaranteesIdRoute
+  '/guarantees/new': typeof GuaranteesNewRoute
   '/import-lc/$id': typeof ImportLcIdRoute
   '/import-lc/new': typeof ImportLcNewRoute
   '/import-wo-lc/$id': typeof ImportWoLcIdRoute
@@ -117,6 +131,8 @@ export interface FileRoutesByTo {
   '/export-lc/new': typeof ExportLcNewRoute
   '/export-wo-lc/$id': typeof ExportWoLcIdRoute
   '/export-wo-lc/new': typeof ExportWoLcNewRoute
+  '/guarantees/$id': typeof GuaranteesIdRoute
+  '/guarantees/new': typeof GuaranteesNewRoute
   '/import-lc/$id': typeof ImportLcIdRoute
   '/import-lc/new': typeof ImportLcNewRoute
   '/import-wo-lc/$id': typeof ImportWoLcIdRoute
@@ -134,6 +150,8 @@ export interface FileRoutesById {
   '/export-lc/new': typeof ExportLcNewRoute
   '/export-wo-lc/$id': typeof ExportWoLcIdRoute
   '/export-wo-lc/new': typeof ExportWoLcNewRoute
+  '/guarantees/$id': typeof GuaranteesIdRoute
+  '/guarantees/new': typeof GuaranteesNewRoute
   '/import-lc/$id': typeof ImportLcIdRoute
   '/import-lc/new': typeof ImportLcNewRoute
   '/import-wo-lc/$id': typeof ImportWoLcIdRoute
@@ -152,6 +170,8 @@ export interface FileRouteTypes {
     | '/export-lc/new'
     | '/export-wo-lc/$id'
     | '/export-wo-lc/new'
+    | '/guarantees/$id'
+    | '/guarantees/new'
     | '/import-lc/$id'
     | '/import-lc/new'
     | '/import-wo-lc/$id'
@@ -168,6 +188,8 @@ export interface FileRouteTypes {
     | '/export-lc/new'
     | '/export-wo-lc/$id'
     | '/export-wo-lc/new'
+    | '/guarantees/$id'
+    | '/guarantees/new'
     | '/import-lc/$id'
     | '/import-lc/new'
     | '/import-wo-lc/$id'
@@ -184,6 +206,8 @@ export interface FileRouteTypes {
     | '/export-lc/new'
     | '/export-wo-lc/$id'
     | '/export-wo-lc/new'
+    | '/guarantees/$id'
+    | '/guarantees/new'
     | '/import-lc/$id'
     | '/import-lc/new'
     | '/import-wo-lc/$id'
@@ -201,6 +225,8 @@ export interface RootRouteChildren {
   ExportLcNewRoute: typeof ExportLcNewRoute
   ExportWoLcIdRoute: typeof ExportWoLcIdRoute
   ExportWoLcNewRoute: typeof ExportWoLcNewRoute
+  GuaranteesIdRoute: typeof GuaranteesIdRoute
+  GuaranteesNewRoute: typeof GuaranteesNewRoute
   ImportLcIdRoute: typeof ImportLcIdRoute
   ImportLcNewRoute: typeof ImportLcNewRoute
   ImportWoLcIdRoute: typeof ImportWoLcIdRoute
@@ -284,6 +310,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ImportLcIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guarantees/new': {
+      id: '/guarantees/new'
+      path: '/guarantees/new'
+      fullPath: '/guarantees/new'
+      preLoaderRoute: typeof GuaranteesNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guarantees/$id': {
+      id: '/guarantees/$id'
+      path: '/guarantees/$id'
+      fullPath: '/guarantees/$id'
+      preLoaderRoute: typeof GuaranteesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/export-wo-lc/new': {
       id: '/export-wo-lc/new'
       path: '/export-wo-lc/new'
@@ -321,6 +361,8 @@ const rootRouteChildren: RootRouteChildren = {
   ExportLcNewRoute: ExportLcNewRoute,
   ExportWoLcIdRoute: ExportWoLcIdRoute,
   ExportWoLcNewRoute: ExportWoLcNewRoute,
+  GuaranteesIdRoute: GuaranteesIdRoute,
+  GuaranteesNewRoute: GuaranteesNewRoute,
   ImportLcIdRoute: ImportLcIdRoute,
   ImportLcNewRoute: ImportLcNewRoute,
   ImportWoLcIdRoute: ImportWoLcIdRoute,
@@ -334,3 +376,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
