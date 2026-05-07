@@ -178,3 +178,6 @@ export const importWoLCs: ImportWoLC[] = [
     charges: [],
   },
 ];
+export function getImportWoLC(id: string) {
+  return importWoLCs.find((l) => l.id === id);
+}

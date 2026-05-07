@@ -50,7 +50,7 @@ const tabs = [
 ] as const;
 
 function ExportLCDetail() {
-  const lc = Route.useLoaderData();
+  const lc = Route.useLoaderData() as ExportLC;
   const [active, setActive] = useState<(typeof tabs)[number]["id"]>("overview");
   const realized = lc.realization.reduce((s, r) => s + r.amount, 0);
 

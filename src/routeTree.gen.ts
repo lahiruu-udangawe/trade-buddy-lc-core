@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ImportWoLcIndexRouteImport } from './routes/import-wo-lc.index'
 import { Route as ImportLcIndexRouteImport } from './routes/import-lc.index'
 import { Route as ExportLcIndexRouteImport } from './routes/export-lc.index'
+import { Route as ImportWoLcNewRouteImport } from './routes/import-wo-lc.new'
+import { Route as ImportWoLcIdRouteImport } from './routes/import-wo-lc.$id'
 import { Route as ImportLcNewRouteImport } from './routes/import-lc.new'
 import { Route as ImportLcIdRouteImport } from './routes/import-lc.$id'
 import { Route as ExportLcNewRouteImport } from './routes/export-lc.new'
@@ -36,6 +38,16 @@ const ImportLcIndexRoute = ImportLcIndexRouteImport.update({
 const ExportLcIndexRoute = ExportLcIndexRouteImport.update({
   id: '/export-lc/',
   path: '/export-lc/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImportWoLcNewRoute = ImportWoLcNewRouteImport.update({
+  id: '/import-wo-lc/new',
+  path: '/import-wo-lc/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImportWoLcIdRoute = ImportWoLcIdRouteImport.update({
+  id: '/import-wo-lc/$id',
+  path: '/import-wo-lc/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImportLcNewRoute = ImportLcNewRouteImport.update({
@@ -65,6 +77,8 @@ export interface FileRoutesByFullPath {
   '/export-lc/new': typeof ExportLcNewRoute
   '/import-lc/$id': typeof ImportLcIdRoute
   '/import-lc/new': typeof ImportLcNewRoute
+  '/import-wo-lc/$id': typeof ImportWoLcIdRoute
+  '/import-wo-lc/new': typeof ImportWoLcNewRoute
   '/export-lc/': typeof ExportLcIndexRoute
   '/import-lc/': typeof ImportLcIndexRoute
   '/import-wo-lc/': typeof ImportWoLcIndexRoute
@@ -75,6 +89,8 @@ export interface FileRoutesByTo {
   '/export-lc/new': typeof ExportLcNewRoute
   '/import-lc/$id': typeof ImportLcIdRoute
   '/import-lc/new': typeof ImportLcNewRoute
+  '/import-wo-lc/$id': typeof ImportWoLcIdRoute
+  '/import-wo-lc/new': typeof ImportWoLcNewRoute
   '/export-lc': typeof ExportLcIndexRoute
   '/import-lc': typeof ImportLcIndexRoute
   '/import-wo-lc': typeof ImportWoLcIndexRoute
@@ -86,6 +102,8 @@ export interface FileRoutesById {
   '/export-lc/new': typeof ExportLcNewRoute
   '/import-lc/$id': typeof ImportLcIdRoute
   '/import-lc/new': typeof ImportLcNewRoute
+  '/import-wo-lc/$id': typeof ImportWoLcIdRoute
+  '/import-wo-lc/new': typeof ImportWoLcNewRoute
   '/export-lc/': typeof ExportLcIndexRoute
   '/import-lc/': typeof ImportLcIndexRoute
   '/import-wo-lc/': typeof ImportWoLcIndexRoute
@@ -98,6 +116,8 @@ export interface FileRouteTypes {
     | '/export-lc/new'
     | '/import-lc/$id'
     | '/import-lc/new'
+    | '/import-wo-lc/$id'
+    | '/import-wo-lc/new'
     | '/export-lc/'
     | '/import-lc/'
     | '/import-wo-lc/'
@@ -108,6 +128,8 @@ export interface FileRouteTypes {
     | '/export-lc/new'
     | '/import-lc/$id'
     | '/import-lc/new'
+    | '/import-wo-lc/$id'
+    | '/import-wo-lc/new'
     | '/export-lc'
     | '/import-lc'
     | '/import-wo-lc'
@@ -118,6 +140,8 @@ export interface FileRouteTypes {
     | '/export-lc/new'
     | '/import-lc/$id'
     | '/import-lc/new'
+    | '/import-wo-lc/$id'
+    | '/import-wo-lc/new'
     | '/export-lc/'
     | '/import-lc/'
     | '/import-wo-lc/'
@@ -129,6 +153,8 @@ export interface RootRouteChildren {
   ExportLcNewRoute: typeof ExportLcNewRoute
   ImportLcIdRoute: typeof ImportLcIdRoute
   ImportLcNewRoute: typeof ImportLcNewRoute
+  ImportWoLcIdRoute: typeof ImportWoLcIdRoute
+  ImportWoLcNewRoute: typeof ImportWoLcNewRoute
   ExportLcIndexRoute: typeof ExportLcIndexRoute
   ImportLcIndexRoute: typeof ImportLcIndexRoute
   ImportWoLcIndexRoute: typeof ImportWoLcIndexRoute
@@ -162,6 +188,20 @@ declare module '@tanstack/react-router' {
       path: '/export-lc'
       fullPath: '/export-lc/'
       preLoaderRoute: typeof ExportLcIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/import-wo-lc/new': {
+      id: '/import-wo-lc/new'
+      path: '/import-wo-lc/new'
+      fullPath: '/import-wo-lc/new'
+      preLoaderRoute: typeof ImportWoLcNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/import-wo-lc/$id': {
+      id: '/import-wo-lc/$id'
+      path: '/import-wo-lc/$id'
+      fullPath: '/import-wo-lc/$id'
+      preLoaderRoute: typeof ImportWoLcIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/import-lc/new': {
@@ -201,6 +241,8 @@ const rootRouteChildren: RootRouteChildren = {
   ExportLcNewRoute: ExportLcNewRoute,
   ImportLcIdRoute: ImportLcIdRoute,
   ImportLcNewRoute: ImportLcNewRoute,
+  ImportWoLcIdRoute: ImportWoLcIdRoute,
+  ImportWoLcNewRoute: ImportWoLcNewRoute,
   ExportLcIndexRoute: ExportLcIndexRoute,
   ImportLcIndexRoute: ImportLcIndexRoute,
   ImportWoLcIndexRoute: ImportWoLcIndexRoute,
@@ -208,12 +250,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
