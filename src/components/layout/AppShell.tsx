@@ -1,11 +1,12 @@
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
-import { LayoutDashboard, FileInput, FileOutput, Bell, Search, Building2, ChevronRight } from "lucide-react";
+import { LayoutDashboard, FileInput, FileOutput, FileStack, Bell, Search, Building2, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const nav = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/import-lc", label: "Import LC", icon: FileInput },
   { to: "/export-lc", label: "Export LC", icon: FileOutput },
+  { to: "/import-wo-lc", label: "Import w/o LC", icon: FileStack },
 ];
 
 export function AppShell() {
@@ -51,7 +52,7 @@ export function AppShell() {
             );
           })}
           <div className="px-3 pt-6 pb-2 text-[10px] uppercase tracking-wider text-sidebar-foreground/50">Coming soon</div>
-          {["Import w/o LC", "Export w/o LC", "Guarantees", "SWIFT", "Reporting"].map((m) => (
+          {["Export w/o LC", "Guarantees", "SWIFT", "Reporting"].map((m) => (
             <div key={m} className="px-3 py-2 rounded-md text-sm text-sidebar-foreground/40 cursor-not-allowed">
               {m}
             </div>
