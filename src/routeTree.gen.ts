@@ -10,19 +10,37 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SwiftIndexRouteImport } from './routes/swift.index'
+import { Route as ReportingIndexRouteImport } from './routes/reporting.index'
 import { Route as ImportWoLcIndexRouteImport } from './routes/import-wo-lc.index'
 import { Route as ImportLcIndexRouteImport } from './routes/import-lc.index'
+import { Route as GuaranteesIndexRouteImport } from './routes/guarantees.index'
+import { Route as ExportWoLcIndexRouteImport } from './routes/export-wo-lc.index'
 import { Route as ExportLcIndexRouteImport } from './routes/export-lc.index'
 import { Route as ImportWoLcNewRouteImport } from './routes/import-wo-lc.new'
 import { Route as ImportWoLcIdRouteImport } from './routes/import-wo-lc.$id'
 import { Route as ImportLcNewRouteImport } from './routes/import-lc.new'
 import { Route as ImportLcIdRouteImport } from './routes/import-lc.$id'
+import { Route as GuaranteesNewRouteImport } from './routes/guarantees.new'
+import { Route as GuaranteesIdRouteImport } from './routes/guarantees.$id'
+import { Route as ExportWoLcNewRouteImport } from './routes/export-wo-lc.new'
+import { Route as ExportWoLcIdRouteImport } from './routes/export-wo-lc.$id'
 import { Route as ExportLcNewRouteImport } from './routes/export-lc.new'
 import { Route as ExportLcIdRouteImport } from './routes/export-lc.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SwiftIndexRoute = SwiftIndexRouteImport.update({
+  id: '/swift/',
+  path: '/swift/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportingIndexRoute = ReportingIndexRouteImport.update({
+  id: '/reporting/',
+  path: '/reporting/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImportWoLcIndexRoute = ImportWoLcIndexRouteImport.update({
@@ -33,6 +51,16 @@ const ImportWoLcIndexRoute = ImportWoLcIndexRouteImport.update({
 const ImportLcIndexRoute = ImportLcIndexRouteImport.update({
   id: '/import-lc/',
   path: '/import-lc/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuaranteesIndexRoute = GuaranteesIndexRouteImport.update({
+  id: '/guarantees/',
+  path: '/guarantees/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExportWoLcIndexRoute = ExportWoLcIndexRouteImport.update({
+  id: '/export-wo-lc/',
+  path: '/export-wo-lc/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExportLcIndexRoute = ExportLcIndexRouteImport.update({
@@ -60,6 +88,26 @@ const ImportLcIdRoute = ImportLcIdRouteImport.update({
   path: '/import-lc/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuaranteesNewRoute = GuaranteesNewRouteImport.update({
+  id: '/guarantees/new',
+  path: '/guarantees/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuaranteesIdRoute = GuaranteesIdRouteImport.update({
+  id: '/guarantees/$id',
+  path: '/guarantees/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExportWoLcNewRoute = ExportWoLcNewRouteImport.update({
+  id: '/export-wo-lc/new',
+  path: '/export-wo-lc/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExportWoLcIdRoute = ExportWoLcIdRouteImport.update({
+  id: '/export-wo-lc/$id',
+  path: '/export-wo-lc/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExportLcNewRoute = ExportLcNewRouteImport.update({
   id: '/export-lc/new',
   path: '/export-lc/new',
@@ -75,38 +123,62 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/export-lc/$id': typeof ExportLcIdRoute
   '/export-lc/new': typeof ExportLcNewRoute
+  '/export-wo-lc/$id': typeof ExportWoLcIdRoute
+  '/export-wo-lc/new': typeof ExportWoLcNewRoute
+  '/guarantees/$id': typeof GuaranteesIdRoute
+  '/guarantees/new': typeof GuaranteesNewRoute
   '/import-lc/$id': typeof ImportLcIdRoute
   '/import-lc/new': typeof ImportLcNewRoute
   '/import-wo-lc/$id': typeof ImportWoLcIdRoute
   '/import-wo-lc/new': typeof ImportWoLcNewRoute
   '/export-lc/': typeof ExportLcIndexRoute
+  '/export-wo-lc/': typeof ExportWoLcIndexRoute
+  '/guarantees/': typeof GuaranteesIndexRoute
   '/import-lc/': typeof ImportLcIndexRoute
   '/import-wo-lc/': typeof ImportWoLcIndexRoute
+  '/reporting/': typeof ReportingIndexRoute
+  '/swift/': typeof SwiftIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/export-lc/$id': typeof ExportLcIdRoute
   '/export-lc/new': typeof ExportLcNewRoute
+  '/export-wo-lc/$id': typeof ExportWoLcIdRoute
+  '/export-wo-lc/new': typeof ExportWoLcNewRoute
+  '/guarantees/$id': typeof GuaranteesIdRoute
+  '/guarantees/new': typeof GuaranteesNewRoute
   '/import-lc/$id': typeof ImportLcIdRoute
   '/import-lc/new': typeof ImportLcNewRoute
   '/import-wo-lc/$id': typeof ImportWoLcIdRoute
   '/import-wo-lc/new': typeof ImportWoLcNewRoute
   '/export-lc': typeof ExportLcIndexRoute
+  '/export-wo-lc': typeof ExportWoLcIndexRoute
+  '/guarantees': typeof GuaranteesIndexRoute
   '/import-lc': typeof ImportLcIndexRoute
   '/import-wo-lc': typeof ImportWoLcIndexRoute
+  '/reporting': typeof ReportingIndexRoute
+  '/swift': typeof SwiftIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/export-lc/$id': typeof ExportLcIdRoute
   '/export-lc/new': typeof ExportLcNewRoute
+  '/export-wo-lc/$id': typeof ExportWoLcIdRoute
+  '/export-wo-lc/new': typeof ExportWoLcNewRoute
+  '/guarantees/$id': typeof GuaranteesIdRoute
+  '/guarantees/new': typeof GuaranteesNewRoute
   '/import-lc/$id': typeof ImportLcIdRoute
   '/import-lc/new': typeof ImportLcNewRoute
   '/import-wo-lc/$id': typeof ImportWoLcIdRoute
   '/import-wo-lc/new': typeof ImportWoLcNewRoute
   '/export-lc/': typeof ExportLcIndexRoute
+  '/export-wo-lc/': typeof ExportWoLcIndexRoute
+  '/guarantees/': typeof GuaranteesIndexRoute
   '/import-lc/': typeof ImportLcIndexRoute
   '/import-wo-lc/': typeof ImportWoLcIndexRoute
+  '/reporting/': typeof ReportingIndexRoute
+  '/swift/': typeof SwiftIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -114,50 +186,82 @@ export interface FileRouteTypes {
     | '/'
     | '/export-lc/$id'
     | '/export-lc/new'
+    | '/export-wo-lc/$id'
+    | '/export-wo-lc/new'
+    | '/guarantees/$id'
+    | '/guarantees/new'
     | '/import-lc/$id'
     | '/import-lc/new'
     | '/import-wo-lc/$id'
     | '/import-wo-lc/new'
     | '/export-lc/'
+    | '/export-wo-lc/'
+    | '/guarantees/'
     | '/import-lc/'
     | '/import-wo-lc/'
+    | '/reporting/'
+    | '/swift/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/export-lc/$id'
     | '/export-lc/new'
+    | '/export-wo-lc/$id'
+    | '/export-wo-lc/new'
+    | '/guarantees/$id'
+    | '/guarantees/new'
     | '/import-lc/$id'
     | '/import-lc/new'
     | '/import-wo-lc/$id'
     | '/import-wo-lc/new'
     | '/export-lc'
+    | '/export-wo-lc'
+    | '/guarantees'
     | '/import-lc'
     | '/import-wo-lc'
+    | '/reporting'
+    | '/swift'
   id:
     | '__root__'
     | '/'
     | '/export-lc/$id'
     | '/export-lc/new'
+    | '/export-wo-lc/$id'
+    | '/export-wo-lc/new'
+    | '/guarantees/$id'
+    | '/guarantees/new'
     | '/import-lc/$id'
     | '/import-lc/new'
     | '/import-wo-lc/$id'
     | '/import-wo-lc/new'
     | '/export-lc/'
+    | '/export-wo-lc/'
+    | '/guarantees/'
     | '/import-lc/'
     | '/import-wo-lc/'
+    | '/reporting/'
+    | '/swift/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExportLcIdRoute: typeof ExportLcIdRoute
   ExportLcNewRoute: typeof ExportLcNewRoute
+  ExportWoLcIdRoute: typeof ExportWoLcIdRoute
+  ExportWoLcNewRoute: typeof ExportWoLcNewRoute
+  GuaranteesIdRoute: typeof GuaranteesIdRoute
+  GuaranteesNewRoute: typeof GuaranteesNewRoute
   ImportLcIdRoute: typeof ImportLcIdRoute
   ImportLcNewRoute: typeof ImportLcNewRoute
   ImportWoLcIdRoute: typeof ImportWoLcIdRoute
   ImportWoLcNewRoute: typeof ImportWoLcNewRoute
   ExportLcIndexRoute: typeof ExportLcIndexRoute
+  ExportWoLcIndexRoute: typeof ExportWoLcIndexRoute
+  GuaranteesIndexRoute: typeof GuaranteesIndexRoute
   ImportLcIndexRoute: typeof ImportLcIndexRoute
   ImportWoLcIndexRoute: typeof ImportWoLcIndexRoute
+  ReportingIndexRoute: typeof ReportingIndexRoute
+  SwiftIndexRoute: typeof SwiftIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -167,6 +271,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/swift/': {
+      id: '/swift/'
+      path: '/swift'
+      fullPath: '/swift/'
+      preLoaderRoute: typeof SwiftIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reporting/': {
+      id: '/reporting/'
+      path: '/reporting'
+      fullPath: '/reporting/'
+      preLoaderRoute: typeof ReportingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/import-wo-lc/': {
@@ -181,6 +299,20 @@ declare module '@tanstack/react-router' {
       path: '/import-lc'
       fullPath: '/import-lc/'
       preLoaderRoute: typeof ImportLcIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guarantees/': {
+      id: '/guarantees/'
+      path: '/guarantees'
+      fullPath: '/guarantees/'
+      preLoaderRoute: typeof GuaranteesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/export-wo-lc/': {
+      id: '/export-wo-lc/'
+      path: '/export-wo-lc'
+      fullPath: '/export-wo-lc/'
+      preLoaderRoute: typeof ExportWoLcIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/export-lc/': {
@@ -218,6 +350,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ImportLcIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guarantees/new': {
+      id: '/guarantees/new'
+      path: '/guarantees/new'
+      fullPath: '/guarantees/new'
+      preLoaderRoute: typeof GuaranteesNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guarantees/$id': {
+      id: '/guarantees/$id'
+      path: '/guarantees/$id'
+      fullPath: '/guarantees/$id'
+      preLoaderRoute: typeof GuaranteesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/export-wo-lc/new': {
+      id: '/export-wo-lc/new'
+      path: '/export-wo-lc/new'
+      fullPath: '/export-wo-lc/new'
+      preLoaderRoute: typeof ExportWoLcNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/export-wo-lc/$id': {
+      id: '/export-wo-lc/$id'
+      path: '/export-wo-lc/$id'
+      fullPath: '/export-wo-lc/$id'
+      preLoaderRoute: typeof ExportWoLcIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/export-lc/new': {
       id: '/export-lc/new'
       path: '/export-lc/new'
@@ -239,13 +399,21 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExportLcIdRoute: ExportLcIdRoute,
   ExportLcNewRoute: ExportLcNewRoute,
+  ExportWoLcIdRoute: ExportWoLcIdRoute,
+  ExportWoLcNewRoute: ExportWoLcNewRoute,
+  GuaranteesIdRoute: GuaranteesIdRoute,
+  GuaranteesNewRoute: GuaranteesNewRoute,
   ImportLcIdRoute: ImportLcIdRoute,
   ImportLcNewRoute: ImportLcNewRoute,
   ImportWoLcIdRoute: ImportWoLcIdRoute,
   ImportWoLcNewRoute: ImportWoLcNewRoute,
   ExportLcIndexRoute: ExportLcIndexRoute,
+  ExportWoLcIndexRoute: ExportWoLcIndexRoute,
+  GuaranteesIndexRoute: GuaranteesIndexRoute,
   ImportLcIndexRoute: ImportLcIndexRoute,
   ImportWoLcIndexRoute: ImportWoLcIndexRoute,
+  ReportingIndexRoute: ReportingIndexRoute,
+  SwiftIndexRoute: SwiftIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

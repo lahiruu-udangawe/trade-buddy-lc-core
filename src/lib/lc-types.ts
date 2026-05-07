@@ -57,7 +57,7 @@ export interface ComplianceCheck {
 
 export interface SwiftMessage {
   id: string;
-  type: "MT700" | "MT707" | "MT710" | "MT711" | "MT740" | "MT202" | "pacs.009";
+  type: "MT700" | "MT707" | "MT710" | "MT711" | "MT740" | "MT202" | "MT103" | "MT940" | "MT950" | "MT760" | "MT767" | "pacs.009";
   status: "Queued" | "Sent" | "ACK" | "NAK";
   createdAt: string;
   reference: string;

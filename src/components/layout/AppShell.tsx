@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
-import { LayoutDashboard, FileInput, FileOutput, FileStack, Bell, Search, Building2, ChevronRight } from "lucide-react";
+import { LayoutDashboard, FileInput, FileOutput, FileStack, ShieldCheck, Send, BarChart3, Bell, Search, Building2, ChevronRight, PackageOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -7,6 +7,10 @@ const nav = [
   { to: "/import-lc", label: "Import LC", icon: FileInput },
   { to: "/export-lc", label: "Export LC", icon: FileOutput },
   { to: "/import-wo-lc", label: "Import w/o LC", icon: FileStack },
+  { to: "/export-wo-lc", label: "Export w/o LC", icon: PackageOpen },
+  { to: "/guarantees", label: "Guarantees", icon: ShieldCheck },
+  { to: "/swift", label: "SWIFT", icon: Send },
+  { to: "/reporting", label: "Reporting", icon: BarChart3 },
 ];
 
 export function AppShell() {
@@ -52,11 +56,7 @@ export function AppShell() {
             );
           })}
           <div className="px-3 pt-6 pb-2 text-[10px] uppercase tracking-wider text-sidebar-foreground/50">Coming soon</div>
-          {["Export w/o LC", "Guarantees", "SWIFT", "Reporting"].map((m) => (
-            <div key={m} className="px-3 py-2 rounded-md text-sm text-sidebar-foreground/40 cursor-not-allowed">
-              {m}
-            </div>
-          ))}
+          <div className="px-3 py-2 text-[11px] text-sidebar-foreground/50 italic">All modules online</div>
         </nav>
         <div className="p-4 border-t border-sidebar-border text-xs text-sidebar-foreground/60">
           <div className="flex items-center gap-2">
