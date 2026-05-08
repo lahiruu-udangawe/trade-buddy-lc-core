@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
-import { LayoutDashboard, FileInput, FileOutput, FileStack, ShieldCheck, Send, BarChart3, Bell, Search, Building2, ChevronRight, PackageOpen } from "lucide-react";
+import { LayoutDashboard, FileInput, FileOutput, FileStack, ShieldCheck, Send, BarChart3, Bell, Search, Building2, ChevronRight, PackageOpen, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth-context";
 
 const nav = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
@@ -16,6 +17,11 @@ const nav = [
 export function AppShell() {
   const location = useLocation();
   const path = location.pathname;
+  const { user, signOut } = useAuth();
+  const initials = (user?.user_metadata?.full_name || user?.email || "U")
+    .split(/\s+|@/)[0]
+    .slice(0, 2)
+    .toUpperCase();
 
   const crumbs = path
     .split("/")
@@ -60,11 +66,14 @@ export function AppShell() {
         </nav>
         <div className="p-4 border-t border-sidebar-border text-xs text-sidebar-foreground/60">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-sidebar-accent flex items-center justify-center font-semibold text-sidebar-accent-foreground">SK</div>
-            <div>
-              <div className="text-sidebar-foreground">S. Karim</div>
-              <div>Trade Officer · Checker</div>
+            <div className="h-8 w-8 rounded-full bg-sidebar-accent flex items-center justify-center font-semibold text-sidebar-accent-foreground">{initials}</div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sidebar-foreground truncate">{user?.user_metadata?.full_name || user?.email}</div>
+              <div>Trade Officer</div>
             </div>
+            <button onClick={() => signOut()} className="p-1.5 rounded hover:bg-sidebar-accent" title="Sign out">
+              <LogOut className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </aside>
