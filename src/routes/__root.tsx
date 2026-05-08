@@ -1,5 +1,5 @@
 import { Link, Outlet, createRootRoute, HeadContent, Scripts, useLocation, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
 import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -89,6 +89,7 @@ function Gate() {
   const { session, loading } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [ready, setReady] = useState(isHydrated());
 
   useEffect(() => {
     if (loading) return;
@@ -98,7 +99,9 @@ function Gate() {
 
   useEffect(() => {
     if (session && !isHydrated()) {
-      hydrateAll();
+      hydrateAll().then(() => setReady(true));
+    } else if (session) {
+      setReady(true);
     }
   }, [session]);
 
@@ -116,6 +119,14 @@ function Gate() {
 
   if (!session) {
     return null;
+  }
+
+  if (!ready) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-background text-sm text-muted-foreground">
+        Syncing trade portfolio…
+      </div>
+    );
   }
 
   return <AppShell />;
