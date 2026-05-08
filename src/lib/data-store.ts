@@ -86,13 +86,13 @@ export async function createRecord<T extends { reference: string; status: string
       amount: meta.amount,
       counterparty: meta.counterparty,
       country: meta.country,
-      data: record as unknown as Record<string, unknown>,
+      data: record as never,
       created_by: u.user?.id ?? null,
     })
     .select("id,reference,status,data")
     .single();
   if (error) throw error;
-  const full = rowToRecord(data) as T;
+  const full = rowToRecord(data) as unknown as T;
   arr.unshift(full);
   return full;
 }
@@ -111,7 +111,7 @@ export async function updateRecord<T extends { id: string; reference: string; st
       amount: meta.amount,
       counterparty: meta.counterparty,
       country: meta.country,
-      data: record as unknown as Record<string, unknown>,
+      data: record as never,
     })
     .eq("id", record.id);
   if (error) throw error;
