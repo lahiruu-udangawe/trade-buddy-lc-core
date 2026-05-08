@@ -1,5 +1,9 @@
-import { Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Link, Outlet, createRootRoute, HeadContent, Scripts, useLocation, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { AppShell } from "@/components/layout/AppShell";
+import { AuthProvider, useAuth } from "@/lib/auth-context";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { hydrateAll, isHydrated } from "@/lib/data-store";
 
 import appCss from "../styles.css?url";
 
@@ -70,5 +74,49 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Gate />
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+}
+
+const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 30_000, refetchOnWindowFocus: false } } });
+
+function Gate() {
+  const { session, loading } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loading) return;
+    if (!session && location.pathname !== "/auth") navigate({ to: "/auth" });
+    if (session && location.pathname === "/auth") navigate({ to: "/" });
+  }, [session, loading, location.pathname, navigate]);
+
+  useEffect(() => {
+    if (session && !isHydrated()) {
+      hydrateAll();
+    }
+  }, [session]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-background text-sm text-muted-foreground">
+        Loading workspace…
+      </div>
+    );
+  }
+
+  if (location.pathname === "/auth") {
+    return <Outlet />;
+  }
+
+  if (!session) {
+    return null;
+  }
+
   return <AppShell />;
 }
