@@ -1,6 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Save, Send, Sparkles } from "lucide-react";
 import { useState } from "react";
+import { createRecord } from "@/lib/data-store";
+import { importLCs } from "@/lib/mock-lc-data";
+import type { ImportLC } from "@/lib/lc-types";
 
 export const Route = createFileRoute("/import-lc/new")({
   head: () => ({
@@ -15,6 +18,48 @@ export const Route = createFileRoute("/import-lc/new")({
 function NewImportLC() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [busy, setBusy] = useState(false);
+  const [form, setForm] = useState({
+    customerName: "", beneficiaryName: "", beneficiaryCountry: "", beneficiaryAddress: "",
+    advisingBank: "", currency: "USD", amount: "", tolerance: "5", incoterm: "",
+    shipmentDate: "", expiryDate: "", goods: "", marginPercent: "15",
+  });
+  const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  async function submit() {
+    setBusy(true);
+    try {
+      const amount = Number(form.amount.replace(/[^\d.]/g, "")) || 0;
+      const margin = (Number(form.marginPercent) || 0) * amount / 100;
+      const ref = `ILC-${new Date().getFullYear()}-${String(importLCs.length + 1).padStart(5, "0")}`;
+      const record: ImportLC = {
+        id: crypto.randomUUID(),
+        reference: ref,
+        applicant: { name: form.customerName || "—", address: "", country: "Bangladesh" },
+        beneficiary: { name: form.beneficiaryName || "—", address: form.beneficiaryAddress, country: form.beneficiaryCountry, bank: form.advisingBank },
+        issuingBank: "TradeFlow Bank",
+        advisingBank: form.advisingBank,
+        currency: form.currency,
+        amount, utilized: 0, tolerance: Number(form.tolerance) || 0,
+        expiryDate: form.expiryDate, shipmentDate: form.shipmentDate,
+        issueDate: new Date().toISOString().slice(0, 10),
+        goods: form.goods, incoterm: form.incoterm, paymentTerms: "Sight",
+        status: "Submitted", marginPercent: Number(form.marginPercent) || 0, marginAmount: margin,
+        charges: [], clauses: [], documents: [], discrepancies: [], compliance: [],
+        swiftMessages: [], amendments: [],
+        approvals: [{ level: 1, role: "Maker", status: "Approved", actedAt: new Date().toISOString() }],
+        audit: [{ id: crypto.randomUUID(), user: "You", action: "LC submitted for approval", timestamp: new Date().toISOString() }],
+        shippingGuarantees: [],
+      };
+      await createRecord("import_lcs", record, importLCs);
+      navigate({ to: "/import-lc" });
+    } catch (e) {
+      alert("Failed to save: " + (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   const steps = ["Applicant & Limits", "Beneficiary & Bank", "Terms & Clauses", "Charges & Margin", "Review"];
 
   return (
@@ -52,7 +97,7 @@ function NewImportLC() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Field label="Customer ID" placeholder="CIF000284" />
-              <Field label="Customer Name" placeholder="Apex Industries Ltd." />
+              <Field label="Customer Name" placeholder="Apex Industries Ltd." value={form.customerName} onChange={set("customerName")} />
               <Field label="Account Number" placeholder="0123-4567-8901" />
               <Field label="Available Limit" placeholder="USD 1,250,000" disabled />
               <Field label="LC Product" placeholder="Sight LC — Commercial" />
@@ -63,23 +108,23 @@ function NewImportLC() {
 
         {step === 2 && (
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Beneficiary Name" placeholder="Shanghai Machinery Co." />
-            <Field label="Beneficiary Country" placeholder="China" />
-            <Field label="Beneficiary Address" placeholder="88 Pudong Ave, Shanghai" full />
-            <Field label="Advising Bank" placeholder="Bank of China" />
+            <Field label="Beneficiary Name" placeholder="Shanghai Machinery Co." value={form.beneficiaryName} onChange={set("beneficiaryName")} />
+            <Field label="Beneficiary Country" placeholder="China" value={form.beneficiaryCountry} onChange={set("beneficiaryCountry")} />
+            <Field label="Beneficiary Address" placeholder="88 Pudong Ave, Shanghai" full value={form.beneficiaryAddress} onChange={set("beneficiaryAddress")} />
+            <Field label="Advising Bank" placeholder="Bank of China" value={form.advisingBank} onChange={set("advisingBank")} />
             <Field label="Advising Bank SWIFT" placeholder="BKCHCNBJ" />
           </div>
         )}
 
         {step === 3 && (
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Currency" placeholder="USD" />
-            <Field label="Amount" placeholder="485,000" />
-            <Field label="Tolerance %" placeholder="5" />
-            <Field label="Incoterm" placeholder="CIF Chittagong" />
-            <Field label="Shipment Date" type="date" />
-            <Field label="Expiry Date" type="date" />
-            <Field label="Goods Description" placeholder="CNC milling machines, model VMX-840" full />
+            <Field label="Currency" placeholder="USD" value={form.currency} onChange={set("currency")} />
+            <Field label="Amount" placeholder="485,000" value={form.amount} onChange={set("amount")} />
+            <Field label="Tolerance %" placeholder="5" value={form.tolerance} onChange={set("tolerance")} />
+            <Field label="Incoterm" placeholder="CIF Chittagong" value={form.incoterm} onChange={set("incoterm")} />
+            <Field label="Shipment Date" type="date" value={form.shipmentDate} onChange={set("shipmentDate")} />
+            <Field label="Expiry Date" type="date" value={form.expiryDate} onChange={set("expiryDate")} />
+            <Field label="Goods Description" placeholder="CNC milling machines, model VMX-840" full value={form.goods} onChange={set("goods")} />
             <div className="col-span-2">
               <label className="text-xs font-medium text-muted-foreground">Clauses (from library)</label>
               <div className="mt-2 flex flex-wrap gap-2">
@@ -96,7 +141,7 @@ function NewImportLC() {
         {step === 4 && (
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <Field label="Margin %" placeholder="15" />
+              <Field label="Margin %" placeholder="15" value={form.marginPercent} onChange={set("marginPercent")} />
               <Field label="Margin Amount (auto)" placeholder="USD 72,750" disabled />
             </div>
             <div className="rounded-md border bg-muted/30 p-4 text-sm">
@@ -135,7 +180,7 @@ function NewImportLC() {
             Back
           </button>
           <div className="flex gap-2">
-            <button className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md border text-sm hover:bg-muted">
+            <button onClick={submit} disabled={busy} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md border text-sm hover:bg-muted disabled:opacity-50">
               <Save className="h-4 w-4" /> Save Draft
             </button>
             {step < 5 ? (
@@ -143,7 +188,7 @@ function NewImportLC() {
                 Continue
               </button>
             ) : (
-              <button onClick={() => navigate({ to: "/import-lc" })} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm hover:bg-primary/90">
+              <button onClick={submit} disabled={busy} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm hover:bg-primary/90 disabled:opacity-50">
                 <Send className="h-4 w-4" /> Submit for Approval
               </button>
             )}
@@ -154,7 +199,7 @@ function NewImportLC() {
   );
 }
 
-function Field({ label, placeholder, type = "text", disabled, full }: { label: string; placeholder?: string; type?: string; disabled?: boolean; full?: boolean }) {
+function Field({ label, placeholder, type = "text", disabled, full, value, onChange }: { label: string; placeholder?: string; type?: string; disabled?: boolean; full?: boolean; value?: string; onChange?: (v: string) => void }) {
   return (
     <div className={full ? "col-span-2" : ""}>
       <label className="text-xs font-medium text-muted-foreground">{label}</label>
@@ -162,6 +207,8 @@ function Field({ label, placeholder, type = "text", disabled, full }: { label: s
         type={type}
         placeholder={placeholder}
         disabled={disabled}
+        value={value}
+        onChange={onChange ? (e) => onChange(e.target.value) : undefined}
         className="mt-1 w-full h-9 px-3 rounded-md border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring disabled:bg-muted disabled:text-muted-foreground"
       />
     </div>
