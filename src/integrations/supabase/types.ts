@@ -14,7 +14,282 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      export_lcs: {
+        Row: {
+          amount: number | null
+          counterparty: string | null
+          country: string | null
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          data: Json
+          id: string
+          reference: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number | null
+          counterparty?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          data?: Json
+          id?: string
+          reference: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number | null
+          counterparty?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          data?: Json
+          id?: string
+          reference?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      export_wo_lcs: {
+        Row: {
+          amount: number | null
+          counterparty: string | null
+          country: string | null
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          data: Json
+          id: string
+          reference: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number | null
+          counterparty?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          data?: Json
+          id?: string
+          reference: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number | null
+          counterparty?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          data?: Json
+          id?: string
+          reference?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      guarantees: {
+        Row: {
+          amount: number | null
+          counterparty: string | null
+          country: string | null
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          data: Json
+          id: string
+          reference: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number | null
+          counterparty?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          data?: Json
+          id?: string
+          reference: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number | null
+          counterparty?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          data?: Json
+          id?: string
+          reference?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      import_lcs: {
+        Row: {
+          amount: number | null
+          counterparty: string | null
+          country: string | null
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          data: Json
+          id: string
+          reference: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number | null
+          counterparty?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          data?: Json
+          id?: string
+          reference: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number | null
+          counterparty?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          data?: Json
+          id?: string
+          reference?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      import_wo_lcs: {
+        Row: {
+          amount: number | null
+          counterparty: string | null
+          country: string | null
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          data: Json
+          id: string
+          reference: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number | null
+          counterparty?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          data?: Json
+          id?: string
+          reference: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number | null
+          counterparty?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          data?: Json
+          id?: string
+          reference?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          branch: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          branch?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          role?: string
+          updated_at?: string
+        }
+        Update: {
+          branch?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      swift_messages: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          direction: string
+          id: string
+          module: string
+          parent_reference: string | null
+          payload: Json | null
+          reference: string
+          status: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          direction?: string
+          id?: string
+          module: string
+          parent_reference?: string | null
+          payload?: Json | null
+          reference: string
+          status?: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          direction?: string
+          id?: string
+          module?: string
+          parent_reference?: string | null
+          payload?: Json | null
+          reference?: string
+          status?: string
+          type?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
