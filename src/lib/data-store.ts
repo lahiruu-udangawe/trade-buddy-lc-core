@@ -33,10 +33,45 @@ async function loadInto<T extends { id: string; reference: string; status: strin
 let hydrated = false;
 let hydrating: Promise<void> | null = null;
 
+async function seedIfEmpty() {
+  const { count } = await supabase.from("import_lcs").select("*", { count: "exact", head: true });
+  if (count && count > 0) return;
+  const { importLCs: il } = await import("@/lib/mock-lc-data");
+  const { exportLCs: el } = await import("@/lib/mock-lc-data");
+  const { importWoLCs: iw } = await import("@/lib/mock-import-wo-lc");
+  const { exportWoLCs: ew } = await import("@/lib/mock-export-wo-lc");
+  const { guarantees: g } = await import("@/lib/mock-guarantees");
+  const { data: u } = await supabase.auth.getUser();
+  const uid = u.user?.id ?? null;
+  const meta = (r: Record<string, unknown>) => {
+    const amount = (r.amount ?? r.invoiceAmount) as number | undefined;
+    const b = r.beneficiary as { name?: string; country?: string } | undefined;
+    const s = r.supplier as { name?: string; country?: string } | undefined;
+    const by = r.buyer as { name?: string; country?: string } | undefined;
+    const ap = r.applicant as { name?: string } | undefined;
+    return {
+      currency: r.currency as string | undefined,
+      amount,
+      counterparty: b?.name || s?.name || by?.name || ap?.name,
+      country: b?.country || s?.country || by?.country || (r.countryOfOrigin as string) || (r.countryOfDestination as string),
+    };
+  };
+  const pack = (rows: { reference: string; status: string }[]) =>
+    rows.map((r) => ({ reference: r.reference, status: r.status, ...meta(r as never), data: r as never, created_by: uid }));
+  await Promise.all([
+    supabase.from("import_lcs").insert(pack(il)),
+    supabase.from("export_lcs").insert(pack(el)),
+    supabase.from("import_wo_lcs").insert(pack(iw)),
+    supabase.from("export_wo_lcs").insert(pack(ew)),
+    supabase.from("guarantees").insert(pack(g)),
+  ]);
+}
+
 export async function hydrateAll() {
   if (hydrated) return;
   if (hydrating) return hydrating;
   hydrating = (async () => {
+    await seedIfEmpty().catch((e) => console.warn("[data-store] seed skipped:", e));
     await Promise.all([
       loadInto("import_lcs", importLCs as ImportLC[]),
       loadInto("export_lcs", exportLCs as ExportLC[]),
