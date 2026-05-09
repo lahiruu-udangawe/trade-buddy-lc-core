@@ -12,10 +12,8 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const navigate = useNavigate();
   const { session, loading } = useAuth();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState("demo@tradeflow.ai");
+  const [password, setPassword] = useState("TradeFlow2026!");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
@@ -28,20 +26,8 @@ function AuthPage() {
     setErr(null);
     setBusy(true);
     try {
-      if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/`,
-            data: { full_name: name },
-          },
-        });
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-      }
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
     } catch (e) {
       setErr((e as Error).message);
     } finally {
@@ -61,12 +47,14 @@ function AuthPage() {
             <div className="text-xs text-muted-foreground">Virtual Trade Suite</div>
           </div>
         </div>
-        <h1 className="text-lg font-semibold">{mode === "signin" ? "Sign in" : "Create account"}</h1>
+        <h1 className="text-lg font-semibold">Sign in</h1>
         <p className="text-xs text-muted-foreground mb-5">Bank operations workspace · Maker / Checker / Approver</p>
+        <div className="mb-4 rounded-md border bg-muted/40 p-3 text-xs">
+          <div className="font-medium text-foreground mb-1">Demo credentials</div>
+          <div className="text-muted-foreground">Email: <span className="font-mono text-foreground">demo@tradeflow.ai</span></div>
+          <div className="text-muted-foreground">Password: <span className="font-mono text-foreground">TradeFlow2026!</span></div>
+        </div>
         <form onSubmit={submit} className="space-y-3">
-          {mode === "signup" && (
-            <Field label="Full name" value={name} onChange={setName} placeholder="S. Karim" required />
-          )}
           <Field label="Email" type="email" value={email} onChange={setEmail} required />
           <Field label="Password" type="password" value={password} onChange={setPassword} required />
           {err && <div className="text-sm text-status-error">{err}</div>}
@@ -75,15 +63,9 @@ function AuthPage() {
             className="w-full h-10 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 inline-flex items-center justify-center gap-2 disabled:opacity-60"
           >
             {busy && <Loader2 className="h-4 w-4 animate-spin" />}
-            {mode === "signin" ? "Sign in" : "Create account"}
+            Sign in
           </button>
         </form>
-        <button
-          onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-          className="mt-4 text-xs text-muted-foreground hover:text-foreground"
-        >
-          {mode === "signin" ? "No account? Create one" : "Have an account? Sign in"}
-        </button>
       </div>
     </div>
   );
