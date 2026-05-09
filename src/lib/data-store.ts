@@ -178,7 +178,9 @@ const listeners = new Set<() => void>();
 
 export function onDataChange(cb: () => void) {
   listeners.add(cb);
-  return () => listeners.delete(cb);
+  return () => {
+    listeners.delete(cb);
+  };
 }
 
 function notify() {
