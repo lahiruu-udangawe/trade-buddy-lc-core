@@ -111,7 +111,8 @@ function Gate() {
   }, [session]);
 
   useEffect(() => {
-    return onDataChange(() => force((n) => n + 1));
+    const off = onDataChange(() => force((n) => n + 1));
+    return () => { off; };
   }, []);
 
   if (loading) {
