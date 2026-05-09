@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
 import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { hydrateAll, isHydrated } from "@/lib/data-store";
+import { hydrateAll, isHydrated, startRealtime, onDataChange } from "@/lib/data-store";
 
 import appCss from "../styles.css?url";
 
@@ -90,6 +90,7 @@ function Gate() {
   const location = useLocation();
   const navigate = useNavigate();
   const [ready, setReady] = useState(isHydrated());
+  const [, force] = useState(0);
 
   useEffect(() => {
     if (loading) return;
@@ -99,11 +100,19 @@ function Gate() {
 
   useEffect(() => {
     if (session && !isHydrated()) {
-      hydrateAll().then(() => setReady(true));
+      hydrateAll().then(() => {
+        startRealtime();
+        setReady(true);
+      });
     } else if (session) {
+      startRealtime();
       setReady(true);
     }
   }, [session]);
+
+  useEffect(() => {
+    return onDataChange(() => force((n) => n + 1));
+  }, []);
 
   if (loading) {
     return (
