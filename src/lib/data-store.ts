@@ -153,3 +153,83 @@ export async function updateRecord<T extends { id: string; reference: string; st
 }
 
 export { tableFor };
+
+export async function deleteRecord<T extends { id: string }>(
+  table: TableName,
+  id: string,
+  arr: T[],
+) {
+  const { error } = await supabase.from(table).delete().eq("id", id);
+  if (error) throw error;
+  const i = arr.findIndex((r) => r.id === id);
+  if (i >= 0) arr.splice(i, 1);
+}
+
+const arrFor: Record<TableName, unknown[]> = {
+  import_lcs: importLCs as unknown[],
+  export_lcs: exportLCs as unknown[],
+  import_wo_lcs: importWoLCs as unknown[],
+  export_wo_lcs: exportWoLCs as unknown[],
+  guarantees: guarantees as unknown[],
+};
+
+let realtimeStarted = false;
+const listeners = new Set<() => void>();
+
+export function onDataChange(cb: () => void) {
+  listeners.add(cb);
+  return () => listeners.delete(cb);
+}
+
+function notify() {
+  for (const cb of listeners) cb();
+}
+
+export function startRealtime() {
+  if (realtimeStarted) return;
+  realtimeStarted = true;
+  const tables: TableName[] = ["import_lcs", "export_lcs", "import_wo_lcs", "export_wo_lcs", "guarantees"];
+  for (const t of tables) {
+    supabase
+      .channel(`rt-${t}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: t }, (payload) => {
+        const arr = arrFor[t] as { id: string }[];
+        if (payload.eventType === "INSERT" || payload.eventType === "UPDATE") {
+          const row = payload.new as { id: string; reference: string; status: string; data: unknown };
+          const rec = rowToRecord(row);
+          const i = arr.findIndex((r) => r.id === row.id);
+          if (i >= 0) arr[i] = rec as never;
+          else arr.unshift(rec as never);
+        } else if (payload.eventType === "DELETE") {
+          const id = (payload.old as { id: string }).id;
+          const i = arr.findIndex((r) => r.id === id);
+          if (i >= 0) arr.splice(i, 1);
+        }
+        notify();
+      })
+      .subscribe();
+  }
+}
+
+export async function logSwiftMessage(args: {
+  module: string;
+  parentReference?: string;
+  type: string;
+  direction?: "IN" | "OUT";
+  status?: string;
+  reference: string;
+  payload?: Record<string, unknown>;
+}) {
+  const { data: u } = await supabase.auth.getUser();
+  const { error } = await supabase.from("swift_messages").insert({
+    module: args.module,
+    parent_reference: args.parentReference ?? null,
+    type: args.type,
+    direction: args.direction ?? "OUT",
+    status: args.status ?? "Queued",
+    reference: args.reference,
+    payload: args.payload ?? {},
+    created_by: u.user?.id ?? null,
+  });
+  if (error) console.error("[swift] log failed", error);
+}
