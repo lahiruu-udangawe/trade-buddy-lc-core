@@ -228,7 +228,7 @@ export async function logSwiftMessage(args: {
     direction: args.direction ?? "OUT",
     status: args.status ?? "Queued",
     reference: args.reference,
-    payload: args.payload ?? {},
+    payload: (args.payload ?? {}) as never,
     created_by: u.user?.id ?? null,
   });
   if (error) console.error("[swift] log failed", error);
