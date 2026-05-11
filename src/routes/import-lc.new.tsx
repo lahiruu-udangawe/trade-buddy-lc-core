@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createRecord } from "@/lib/data-store";
 import { importLCs } from "@/lib/mock-lc-data";
 import type { ImportLC } from "@/lib/lc-types";
+import { LCDocumentUpload, type UploadedDoc } from "@/components/lc/LCDocumentUpload";
 
 export const Route = createFileRoute("/import-lc/new")({
   head: () => ({
@@ -19,6 +20,7 @@ function NewImportLC() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [busy, setBusy] = useState(false);
+  const [uploadedDocs, setUploadedDocs] = useState<UploadedDoc[]>([]);
   const [form, setForm] = useState({
     customerName: "", beneficiaryName: "", beneficiaryCountry: "", beneficiaryAddress: "",
     advisingBank: "", currency: "USD", amount: "", tolerance: "5", incoterm: "",
@@ -32,6 +34,24 @@ function NewImportLC() {
       const amount = Number(form.amount.replace(/[^\d.]/g, "")) || 0;
       const margin = (Number(form.marginPercent) || 0) * amount / 100;
       const ref = `ILC-${new Date().getFullYear()}-${String(importLCs.length + 1).padStart(5, "0")}`;
+      const docs = uploadedDocs.map((d) => ({
+        id: d.id, name: d.name, type: (d.docType as never) || "Other",
+        uploadedAt: new Date().toISOString(), uploadedBy: "You", version: 1,
+        size: `${(d.size / 1024).toFixed(0)} KB`,
+        ocrConfidence: d.extraction?.ocrConfidence,
+      }));
+      const aiDiscrepancies = uploadedDocs.flatMap((d) =>
+        (d.extraction?.verifications ?? [])
+          .filter((v) => v.status === "mismatch" || v.status === "warning")
+          .map((v) => ({
+            id: crypto.randomUUID(),
+            type: "Field Mismatch" as const,
+            severity: (v.status === "mismatch" ? "High" : "Medium") as "High" | "Medium",
+            detectedBy: "AI" as const,
+            remarks: `${d.name} · ${v.field}: ${v.note}`,
+            status: "Open" as const,
+          }))
+      );
       const record: ImportLC = {
         id: crypto.randomUUID(),
         reference: ref,
@@ -45,7 +65,7 @@ function NewImportLC() {
         issueDate: new Date().toISOString().slice(0, 10),
         goods: form.goods, incoterm: form.incoterm, paymentTerms: "Sight",
         status: "Submitted", marginPercent: Number(form.marginPercent) || 0, marginAmount: margin,
-        charges: [], clauses: [], documents: [], discrepancies: [], compliance: [],
+        charges: [], clauses: [], documents: docs as never, discrepancies: aiDiscrepancies, compliance: [],
         swiftMessages: [], amendments: [],
         approvals: [{ level: 1, role: "Maker", status: "Approved", actedAt: new Date().toISOString() }],
         audit: [{ id: crypto.randomUUID(), user: "You", action: "LC submitted for approval", timestamp: new Date().toISOString() }],
@@ -60,7 +80,7 @@ function NewImportLC() {
     }
   }
 
-  const steps = ["Applicant & Limits", "Beneficiary & Bank", "Terms & Clauses", "Charges & Margin", "Review"];
+  const steps = ["Applicant & Limits", "Beneficiary & Bank", "Terms & Clauses", "Charges & Margin", "Documents & AI", "Review"];
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
@@ -159,6 +179,22 @@ function NewImportLC() {
         )}
 
         {step === 5 && (
+          <LCDocumentUpload
+            lcContext={{
+              applicant: form.customerName,
+              beneficiary: form.beneficiaryName,
+              currency: form.currency,
+              amount: Number(form.amount.replace(/[^\d.]/g, "")) || undefined,
+              incoterm: form.incoterm,
+              goods: form.goods,
+              shipmentDate: form.shipmentDate,
+              expiryDate: form.expiryDate,
+            }}
+            onChange={setUploadedDocs}
+          />
+        )}
+
+        {step === 6 && (
           <div className="space-y-3">
             <div className="rounded-md bg-status-approved/10 border border-status-approved/20 p-4 text-sm">
               <div className="font-medium text-status-approved">Ready for submission</div>
@@ -172,6 +208,16 @@ function NewImportLC() {
               <Summary k="Margin" v="15% · USD 72,750" />
               <Summary k="Charges" v="USD 1,397.50" />
             </div>
+            {uploadedDocs.length > 0 && (
+              <div className="rounded-md border p-3 text-sm">
+                <div className="font-medium mb-1">{uploadedDocs.length} document(s) attached</div>
+                <ul className="text-xs text-muted-foreground space-y-0.5">
+                  {uploadedDocs.map((d) => (
+                    <li key={d.id}>• {d.name} — {d.extraction ? `${d.extraction.riskLevel} risk, ${d.extraction.verifications.filter(v => v.status === "mismatch").length} mismatch(es)` : d.status}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
 
@@ -183,7 +229,7 @@ function NewImportLC() {
             <button onClick={submit} disabled={busy} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md border text-sm hover:bg-muted disabled:opacity-50">
               <Save className="h-4 w-4" /> Save Draft
             </button>
-            {step < 5 ? (
+            {step < 6 ? (
               <button onClick={() => setStep(step + 1)} className="px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm hover:bg-primary/90">
                 Continue
               </button>
