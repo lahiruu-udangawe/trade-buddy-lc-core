@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
-import { LayoutDashboard, FileInput, FileOutput, FileStack, ShieldCheck, Send, BarChart3, Bell, Search, Building2, ChevronRight, PackageOpen, LogOut } from "lucide-react";
+import { LayoutDashboard, FileInput, FileOutput, FileStack, ShieldCheck, Send, BarChart3, Bell, Search, Building2, ChevronRight, PackageOpen, LogOut, Plug } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-context";
 
@@ -12,6 +12,7 @@ const nav = [
   { to: "/guarantees", label: "Guarantees", icon: ShieldCheck },
   { to: "/swift", label: "SWIFT", icon: Send },
   { to: "/reporting", label: "Reporting", icon: BarChart3 },
+  { to: "/connectors", label: "Connectors", icon: Plug },
 ];
 
 export function AppShell() {
