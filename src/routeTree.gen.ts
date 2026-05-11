@@ -18,6 +18,7 @@ import { Route as ImportLcIndexRouteImport } from './routes/import-lc.index'
 import { Route as GuaranteesIndexRouteImport } from './routes/guarantees.index'
 import { Route as ExportWoLcIndexRouteImport } from './routes/export-wo-lc.index'
 import { Route as ExportLcIndexRouteImport } from './routes/export-lc.index'
+import { Route as ConnectorsIndexRouteImport } from './routes/connectors.index'
 import { Route as ImportWoLcNewRouteImport } from './routes/import-wo-lc.new'
 import { Route as ImportWoLcIdRouteImport } from './routes/import-wo-lc.$id'
 import { Route as ImportLcNewRouteImport } from './routes/import-lc.new'
@@ -72,6 +73,11 @@ const ExportWoLcIndexRoute = ExportWoLcIndexRouteImport.update({
 const ExportLcIndexRoute = ExportLcIndexRouteImport.update({
   id: '/export-lc/',
   path: '/export-lc/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnectorsIndexRoute = ConnectorsIndexRouteImport.update({
+  id: '/connectors/',
+  path: '/connectors/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImportWoLcNewRoute = ImportWoLcNewRouteImport.update({
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/import-lc/new': typeof ImportLcNewRoute
   '/import-wo-lc/$id': typeof ImportWoLcIdRoute
   '/import-wo-lc/new': typeof ImportWoLcNewRoute
+  '/connectors/': typeof ConnectorsIndexRoute
   '/export-lc/': typeof ExportLcIndexRoute
   '/export-wo-lc/': typeof ExportWoLcIndexRoute
   '/guarantees/': typeof GuaranteesIndexRoute
@@ -159,6 +166,7 @@ export interface FileRoutesByTo {
   '/import-lc/new': typeof ImportLcNewRoute
   '/import-wo-lc/$id': typeof ImportWoLcIdRoute
   '/import-wo-lc/new': typeof ImportWoLcNewRoute
+  '/connectors': typeof ConnectorsIndexRoute
   '/export-lc': typeof ExportLcIndexRoute
   '/export-wo-lc': typeof ExportWoLcIndexRoute
   '/guarantees': typeof GuaranteesIndexRoute
@@ -181,6 +189,7 @@ export interface FileRoutesById {
   '/import-lc/new': typeof ImportLcNewRoute
   '/import-wo-lc/$id': typeof ImportWoLcIdRoute
   '/import-wo-lc/new': typeof ImportWoLcNewRoute
+  '/connectors/': typeof ConnectorsIndexRoute
   '/export-lc/': typeof ExportLcIndexRoute
   '/export-wo-lc/': typeof ExportWoLcIndexRoute
   '/guarantees/': typeof GuaranteesIndexRoute
@@ -204,6 +213,7 @@ export interface FileRouteTypes {
     | '/import-lc/new'
     | '/import-wo-lc/$id'
     | '/import-wo-lc/new'
+    | '/connectors/'
     | '/export-lc/'
     | '/export-wo-lc/'
     | '/guarantees/'
@@ -225,6 +235,7 @@ export interface FileRouteTypes {
     | '/import-lc/new'
     | '/import-wo-lc/$id'
     | '/import-wo-lc/new'
+    | '/connectors'
     | '/export-lc'
     | '/export-wo-lc'
     | '/guarantees'
@@ -246,6 +257,7 @@ export interface FileRouteTypes {
     | '/import-lc/new'
     | '/import-wo-lc/$id'
     | '/import-wo-lc/new'
+    | '/connectors/'
     | '/export-lc/'
     | '/export-wo-lc/'
     | '/guarantees/'
@@ -268,6 +280,7 @@ export interface RootRouteChildren {
   ImportLcNewRoute: typeof ImportLcNewRoute
   ImportWoLcIdRoute: typeof ImportWoLcIdRoute
   ImportWoLcNewRoute: typeof ImportWoLcNewRoute
+  ConnectorsIndexRoute: typeof ConnectorsIndexRoute
   ExportLcIndexRoute: typeof ExportLcIndexRoute
   ExportWoLcIndexRoute: typeof ExportWoLcIndexRoute
   GuaranteesIndexRoute: typeof GuaranteesIndexRoute
@@ -340,6 +353,13 @@ declare module '@tanstack/react-router' {
       path: '/export-lc'
       fullPath: '/export-lc/'
       preLoaderRoute: typeof ExportLcIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connectors/': {
+      id: '/connectors/'
+      path: '/connectors'
+      fullPath: '/connectors/'
+      preLoaderRoute: typeof ConnectorsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/import-wo-lc/new': {
@@ -428,6 +448,7 @@ const rootRouteChildren: RootRouteChildren = {
   ImportLcNewRoute: ImportLcNewRoute,
   ImportWoLcIdRoute: ImportWoLcIdRoute,
   ImportWoLcNewRoute: ImportWoLcNewRoute,
+  ConnectorsIndexRoute: ConnectorsIndexRoute,
   ExportLcIndexRoute: ExportLcIndexRoute,
   ExportWoLcIndexRoute: ExportWoLcIndexRoute,
   GuaranteesIndexRoute: GuaranteesIndexRoute,
