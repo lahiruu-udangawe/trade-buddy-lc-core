@@ -27,6 +27,7 @@ import { Route as GuaranteesNewRouteImport } from './routes/guarantees.new'
 import { Route as GuaranteesIdRouteImport } from './routes/guarantees.$id'
 import { Route as ExportWoLcNewRouteImport } from './routes/export-wo-lc.new'
 import { Route as ExportWoLcIdRouteImport } from './routes/export-wo-lc.$id'
+import { Route as ExportLcNewRouteImport } from './routes/export-lc.new'
 import { Route as ExportLcIdRouteImport } from './routes/export-lc.$id'
 
 const AuthRoute = AuthRouteImport.update({
@@ -119,6 +120,11 @@ const ExportWoLcIdRoute = ExportWoLcIdRouteImport.update({
   path: '/export-wo-lc/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExportLcNewRoute = ExportLcNewRouteImport.update({
+  id: '/export-lc/new',
+  path: '/export-lc/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExportLcIdRoute = ExportLcIdRouteImport.update({
   id: '/export-lc/$id',
   path: '/export-lc/$id',
@@ -129,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/export-lc/$id': typeof ExportLcIdRoute
+  '/export-lc/new': typeof ExportLcNewRoute
   '/export-wo-lc/$id': typeof ExportWoLcIdRoute
   '/export-wo-lc/new': typeof ExportWoLcNewRoute
   '/guarantees/$id': typeof GuaranteesIdRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/export-lc/$id': typeof ExportLcIdRoute
+  '/export-lc/new': typeof ExportLcNewRoute
   '/export-wo-lc/$id': typeof ExportWoLcIdRoute
   '/export-wo-lc/new': typeof ExportWoLcNewRoute
   '/guarantees/$id': typeof GuaranteesIdRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/export-lc/$id': typeof ExportLcIdRoute
+  '/export-lc/new': typeof ExportLcNewRoute
   '/export-wo-lc/$id': typeof ExportWoLcIdRoute
   '/export-wo-lc/new': typeof ExportWoLcNewRoute
   '/guarantees/$id': typeof GuaranteesIdRoute
@@ -195,6 +204,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/export-lc/$id'
+    | '/export-lc/new'
     | '/export-wo-lc/$id'
     | '/export-wo-lc/new'
     | '/guarantees/$id'
@@ -216,6 +226,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/export-lc/$id'
+    | '/export-lc/new'
     | '/export-wo-lc/$id'
     | '/export-wo-lc/new'
     | '/guarantees/$id'
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/export-lc/$id'
+    | '/export-lc/new'
     | '/export-wo-lc/$id'
     | '/export-wo-lc/new'
     | '/guarantees/$id'
@@ -259,6 +271,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   ExportLcIdRoute: typeof ExportLcIdRoute
+  ExportLcNewRoute: typeof ExportLcNewRoute
   ExportWoLcIdRoute: typeof ExportWoLcIdRoute
   ExportWoLcNewRoute: typeof ExportWoLcNewRoute
   GuaranteesIdRoute: typeof GuaranteesIdRoute
@@ -405,6 +418,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExportWoLcIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/export-lc/new': {
+      id: '/export-lc/new'
+      path: '/export-lc/new'
+      fullPath: '/export-lc/new'
+      preLoaderRoute: typeof ExportLcNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/export-lc/$id': {
       id: '/export-lc/$id'
       path: '/export-lc/$id'
@@ -419,6 +439,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   ExportLcIdRoute: ExportLcIdRoute,
+  ExportLcNewRoute: ExportLcNewRoute,
   ExportWoLcIdRoute: ExportWoLcIdRoute,
   ExportWoLcNewRoute: ExportWoLcNewRoute,
   GuaranteesIdRoute: GuaranteesIdRoute,
@@ -439,12 +460,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
