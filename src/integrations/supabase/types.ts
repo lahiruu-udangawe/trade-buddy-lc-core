@@ -290,6 +290,122 @@ export type Database = {
         }
         Relationships: []
       }
+      workflow_audit: {
+        Row: {
+          action: string
+          actor: string | null
+          actor_name: string | null
+          comment: string | null
+          created_at: string
+          from_stage: string | null
+          id: string
+          module: string
+          parent_reference: string
+          task_id: string | null
+          to_stage: string | null
+        }
+        Insert: {
+          action: string
+          actor?: string | null
+          actor_name?: string | null
+          comment?: string | null
+          created_at?: string
+          from_stage?: string | null
+          id?: string
+          module: string
+          parent_reference: string
+          task_id?: string | null
+          to_stage?: string | null
+        }
+        Update: {
+          action?: string
+          actor?: string | null
+          actor_name?: string | null
+          comment?: string | null
+          created_at?: string
+          from_stage?: string | null
+          id?: string
+          module?: string
+          parent_reference?: string
+          task_id?: string | null
+          to_stage?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_audit_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "workflow_tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workflow_tasks: {
+        Row: {
+          assignee_role: string
+          assignee_user: string | null
+          comment: string | null
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          data: Json
+          due_at: string
+          id: string
+          module: string
+          parent_reference: string
+          priority: string
+          sla_hours: number
+          stage: string
+          started_at: string | null
+          status: string
+          step_index: number
+          updated_at: string
+          workflow_key: string
+        }
+        Insert: {
+          assignee_role: string
+          assignee_user?: string | null
+          comment?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          data?: Json
+          due_at?: string
+          id?: string
+          module: string
+          parent_reference: string
+          priority?: string
+          sla_hours?: number
+          stage: string
+          started_at?: string | null
+          status?: string
+          step_index?: number
+          updated_at?: string
+          workflow_key: string
+        }
+        Update: {
+          assignee_role?: string
+          assignee_user?: string | null
+          comment?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          data?: Json
+          due_at?: string
+          id?: string
+          module?: string
+          parent_reference?: string
+          priority?: string
+          sla_hours?: number
+          stage?: string
+          started_at?: string | null
+          status?: string
+          step_index?: number
+          updated_at?: string
+          workflow_key?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
