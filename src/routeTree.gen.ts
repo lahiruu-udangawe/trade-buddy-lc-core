@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as WorkflowIndexRouteImport } from './routes/workflow.index'
 import { Route as SwiftIndexRouteImport } from './routes/swift.index'
 import { Route as ReportingIndexRouteImport } from './routes/reporting.index'
 import { Route as ImportWoLcIndexRouteImport } from './routes/import-wo-lc.index'
@@ -38,6 +39,11 @@ const AuthRoute = AuthRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkflowIndexRoute = WorkflowIndexRouteImport.update({
+  id: '/workflow/',
+  path: '/workflow/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SwiftIndexRoute = SwiftIndexRouteImport.update({
@@ -152,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/import-wo-lc/': typeof ImportWoLcIndexRoute
   '/reporting/': typeof ReportingIndexRoute
   '/swift/': typeof SwiftIndexRoute
+  '/workflow/': typeof WorkflowIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -174,6 +181,7 @@ export interface FileRoutesByTo {
   '/import-wo-lc': typeof ImportWoLcIndexRoute
   '/reporting': typeof ReportingIndexRoute
   '/swift': typeof SwiftIndexRoute
+  '/workflow': typeof WorkflowIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -197,6 +205,7 @@ export interface FileRoutesById {
   '/import-wo-lc/': typeof ImportWoLcIndexRoute
   '/reporting/': typeof ReportingIndexRoute
   '/swift/': typeof SwiftIndexRoute
+  '/workflow/': typeof WorkflowIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -221,6 +230,7 @@ export interface FileRouteTypes {
     | '/import-wo-lc/'
     | '/reporting/'
     | '/swift/'
+    | '/workflow/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -243,6 +253,7 @@ export interface FileRouteTypes {
     | '/import-wo-lc'
     | '/reporting'
     | '/swift'
+    | '/workflow'
   id:
     | '__root__'
     | '/'
@@ -265,6 +276,7 @@ export interface FileRouteTypes {
     | '/import-wo-lc/'
     | '/reporting/'
     | '/swift/'
+    | '/workflow/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -288,6 +300,7 @@ export interface RootRouteChildren {
   ImportWoLcIndexRoute: typeof ImportWoLcIndexRoute
   ReportingIndexRoute: typeof ReportingIndexRoute
   SwiftIndexRoute: typeof SwiftIndexRoute
+  WorkflowIndexRoute: typeof WorkflowIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -304,6 +317,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/workflow/': {
+      id: '/workflow/'
+      path: '/workflow'
+      fullPath: '/workflow/'
+      preLoaderRoute: typeof WorkflowIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/swift/': {
@@ -456,6 +476,7 @@ const rootRouteChildren: RootRouteChildren = {
   ImportWoLcIndexRoute: ImportWoLcIndexRoute,
   ReportingIndexRoute: ReportingIndexRoute,
   SwiftIndexRoute: SwiftIndexRoute,
+  WorkflowIndexRoute: WorkflowIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
